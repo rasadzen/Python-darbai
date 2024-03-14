@@ -48,27 +48,25 @@ c = conn.cursor()
 
 hobbies = [('1', 'Zvejyba', 1), ('2', 'Knygu skaitymas', 2), ('3', 'Programavimas', 3)]
 additional_hobbies = [('Begimas', '3'), ('Dainuoti', '3')]
-c.executemany('INSERT INTO hobbies(hobby_title, person_id) VALUES (?, ?)', additional_hobbies)
-c.execute(""" SELECT people.name, hobbies.hobby_title from people
-            JOIN hobbies on people.id = hobbies.person_id WHERE people.name = 'Migle'
-             """)
+# c.executemany('INSERT INTO hobbies(hobby_title, person_id) VALUES (?, ?)', additional_hobbies)
+# c.execute(""" SELECT people.name, hobbies.hobby_title from people
+#             JOIN hobbies on people.id = hobbies.person_id WHERE people.name = 'Migle'
+#              """)
 
-# MINDAUGO PVZZZ
-# curs.execute("""
-#     SELECT * FROM
-#
-#     (SELECT people.name as vardas, COUNT(hobbies.hobby) as hobiu_skaicius
-#     FROM people
-#     JOIN hobbies ON hobbies.person_id = people.id
-#     GROUP BY people.id)
-#
-#     WHERE hobiu_skaicius > 1;
-#     """)
-# ans4 = curs.fetchall()
-# print(ans4)
 
-result = c.fetchall()
-print(result)
+
+# c.execute(""" SELECT people.name, hobbies.hobby_title from people
+# join hobbies on people.id = hobbies.person_id
+# order by people.name""")
+# current_person = ''
+# result = c.fetchall()
+# for person_name, hobby in result:
+#     if person_name != current_person:
+#         print(f'{person_name} has the following hobbies:')
+#         current_person = person_name
+#     print(f'- {hobby}')
+
+
 
 # c.executemany('INSERT INTO hobbies VALUES (?,?,?)', hobbies)
 
@@ -83,6 +81,18 @@ print(result)
 
 # result = c.fetchall()
 # print(result)
+
+
+
+
+# LORETOS PVZ
+c.execute(""" SELECT people.name, GROUP_CONCAT(hobbies.hobby_title) as hobies_list, COUNT(hobbies.hobby_title) as hobiu_bent_2 from hobbies
+         JOIN people on people.id = hobbies.person_id
+         GROUP BY people.id
+         HAVING hobiu_bent_2 > 1
+        """)
+result = c.fetchall()
+print(result)
 
 conn.commit()
 conn.close()
